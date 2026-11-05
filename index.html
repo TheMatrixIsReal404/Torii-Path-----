@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Nihongo Master: A production-grade, responsive Japanese language learning platform from JLPT N5 through N1 with stroke-order canvas tracing, gamified drills, SRS, and rich syllabus content.">
+  <meta name="theme-color" content="#E83929">
+  <title>日本語マスター • Nihongo Master (JLPT N5 - N1)</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/games.css">
+</head>
+<body class="furigana-all">
+  <div class="app-container">
+
+    <!-- Global Accessible Header -->
+    <header class="app-header" role="banner">
+      <div class="header-inner">
+        <!-- Logo / Brand -->
+        <a href="#" class="brand-block" data-nav="dashboard" aria-label="Nihongo Master Home">
+          <span class="brand-icon" aria-hidden="true">⛩️</span>
+          <div>
+            <span class="brand-title">Nihongo Master</span>
+            <span class="brand-kanji">日本語マスター</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Bar -->
+        <nav class="desktop-nav" role="navigation" aria-label="Primary Navigation">
+          <a href="#" class="nav-item nav-active" data-nav="dashboard">
+            <span>🗺️ Roadmap</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="zero">
+            <span>🔰 Zero to Hero</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="books">
+            <span>📖 N5 Masterclass</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="hub" data-level="N5">
+            <span>📚 Curriculum</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="kana">
+            <span>🔤 Kana</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="tracer">
+            <span>🖌️ Tracer</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="games">
+            <span>🎮 Games</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="srs">
+            <span>🧠 SRS Review</span>
+            <span class="srs-due-badge" style="display: none;">0</span>
+          </a>
+          <a href="#" class="nav-item" data-nav="achievements">
+            <span>🏆 Badges</span>
+          </a>
+        </nav>
+
+        <!-- User Progress Header Badges & Controls -->
+        <div class="header-stats">
+          <div class="streak-badge" title="Consecutive Daily Learning Streak">
+            <span aria-hidden="true">🔥</span>
+            <span id="header-streak-count">1d</span>
+          </div>
+
+          <div class="xp-badge" title="Accumulated Mastery XP">
+            <span aria-hidden="true">⚡</span>
+            <span id="header-xp-val">0 XP</span>
+          </div>
+
+          <div id="header-rank-badge" class="rank-badge" title="Mastery Rank">
+            初心者 (Novice)
+          </div>
+
+          <!-- Quick Accessibility & Controls Toolbar -->
+          <div class="header-controls">
+            <!-- Furigana Mode Selector -->
+            <div class="furigana-controller" title="Furigana Display Mode">
+              <label for="furigana-mode-select">Furigana:</label>
+              <select id="furigana-mode-select" class="furigana-select" aria-label="Furigana Display Mode">
+                <option value="all">Show All</option>
+                <option value="hover">Hover / Tap Only</option>
+                <option value="hide">Hide All</option>
+              </select>
+            </div>
+
+            <!-- Romaji Mode Selector for Day-1 Beginners -->
+            <div class="romaji-controller" title="Romaji Subtitle Display Mode for Day-1 Beginners">
+              <label for="romaji-mode-select">Romaji:</label>
+              <select id="romaji-mode-select" class="furigana-select" aria-label="Romaji Display Mode">
+                <option value="all">Show All</option>
+                <option value="hover">Hover / Tap</option>
+                <option value="hide">Hide</option>
+              </select>
+            </div>
+
+            <!-- Dark / Light Theme Toggle -->
+            <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+              ☀️ Light
+            </button>
+
+            <!-- Audio Speed Toggle (Slow 0.65x / Normal 0.85x) -->
+            <button id="audio-speed-btn" class="theme-btn" title="Toggle Slow / Normal Audio Pronunciation Speed" aria-label="Toggle Pronunciation Speed">
+              🐢 0.65x
+            </button>
+
+            <!-- Audio Mute / Unmute -->
+            <button id="audio-mute-btn" class="audio-mute-btn" title="Mute/Unmute Speech & Audio Effects" aria-label="Toggle Sound">
+              🔊 Sound
+            </button>
+
+            <!-- Backup & Restore Data Modal -->
+            <button id="backup-data-btn" class="theme-btn" title="Backup or Restore Progress" aria-label="Data Backup">
+              💾 Data
+            </button>
+
+            <!-- Help / Onboarding Tour -->
+            <button id="help-tour-btn" class="theme-btn" title="Open Interactive Tour" aria-label="Help and Tour">
+              ❓ Tour
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Single Page Application Content -->
+    <main class="main-content" role="main">
+
+      <!-- View 1: Dashboard Roadmap & Quick Launch -->
+      <section id="view-dashboard" class="view-panel" style="display: block;">
+        <div id="dashboard-content"></div>
+      </section>
+
+      <!-- View 1.5: Absolute Beginner (Zero to Hero) Track -->
+      <section id="view-zero" class="view-panel" style="display: none;">
+        <div id="zero-beginner-content"></div>
+      </section>
+
+      <!-- View 1.8: Foundational N5 Masterclass (Kanji Origins, Stroke Rules, Mnemonics & Grammar) -->
+      <section id="view-books" class="view-panel" style="display: none;">
+        <div id="book-curriculum-content"></div>
+      </section>
+
+      <!-- View 2: Curriculum Level Hub (N5 - N1) -->
+      <section id="view-hub" class="view-panel" style="display: none;">
+        <div id="hub-content"></div>
+      </section>
+
+      <!-- View 3: Hiragana & Katakana Interactive Chart -->
+      <section id="view-kana" class="view-panel" style="display: none;">
+        <div id="kana-content"></div>
+      </section>
+
+      <!-- View 4: Interactive Stroke-Order Canvas Tracer -->
+      <section id="view-tracer" class="view-panel" style="display: none;">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Interactive Stroke-Order Canvas Tracer</h1>
+            <p class="section-sub">Trace Hiragana, Katakana, and JLPT Kanji directly with mouse or touch. Learn authentic stroke directions with animated guidance.</p>
+          </div>
+        </div>
+
+        <div class="tracer-layout mt-3">
+          <!-- Canvas Frame & Drawing Surface -->
+          <div class="tracer-canvas-panel">
+            <div class="canvas-frame">
+              <canvas id="stroke-canvas" width="300" height="300" aria-label="Interactive Japanese Calligraphy Canvas"></canvas>
+            </div>
+
+            <!-- Canvas Action Toolbar -->
+            <div class="tracer-controls-bar">
+              <button id="tracer-animate-btn" class="btn btn-primary btn-sm">▶ Demonstrate Strokes</button>
+              <button id="tracer-undo-btn" class="btn btn-secondary btn-sm">↩ Undo Stroke</button>
+              <button id="tracer-clear-btn" class="btn btn-secondary btn-sm">🗑 Clear Canvas</button>
+              <button id="tracer-grid-btn" class="btn btn-secondary btn-sm">田 Grid Toggle</button>
+            </div>
+
+            <!-- Instant Accuracy & Guidance Feedback -->
+            <div id="tracer-feedback-msg" class="tracer-feedback-msg" aria-live="polite">
+              Trace stroke #1 starting at the numbered circle ①
+            </div>
+          </div>
+
+          <!-- Character Selector & Mnemonic Sidebar -->
+          <div class="tracer-meta-sidebar">
+            <div class="tracer-select-group">
+              <label for="tracer-char-select">Choose Character to Practice:</label>
+              <select id="tracer-char-select" class="tracer-select"></select>
+            </div>
+
+            <div id="tracer-char-info" class="tracer-char-info">
+              <!-- Dynamically populated by canvas-tracer.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 5: Gamified Practice Hub (Slinger, Matcher, Blitz) -->
+      <section id="view-games" class="view-panel" style="display: none;">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Gamified Japanese Arcades</h1>
+            <p class="section-sub">Rapid interactive drills designed to cement grammar intuition and speed recall.</p>
+          </div>
+          <div class="game-switch-tabs">
+            <button class="btn btn-primary btn-sm game-nav-btn" data-game="slinger" onclick="NihongoApp.launchGame('slinger')">🎯 Particle Slinger</button>
+            <button class="btn btn-secondary btn-sm game-nav-btn" data-game="matcher" onclick="NihongoApp.launchGame('matcher')">🎴 Kana & Kanji Matcher</button>
+            <button class="btn btn-secondary btn-sm game-nav-btn" data-game="blitz" onclick="NihongoApp.launchGame('blitz')">⚡ Speed Blitz</button>
+          </div>
+        </div>
+
+        <div id="game-stage-container" class="mt-4">
+          <!-- Active game is dynamically injected here -->
+        </div>
+      </section>
+
+      <!-- View 6: Spaced Repetition System (SRS) Review Deck -->
+      <section id="view-srs" class="view-panel" style="display: none;">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Spaced Repetition Review (SRS)</h1>
+            <p class="section-sub">Master difficult Kanji, vocabulary, and grammar particles with Leitner-interval spaced repetition.</p>
+          </div>
+        </div>
+        <div id="srs-content" class="mt-3"></div>
+      </section>
+
+      <!-- View 7: Badges & Achievements -->
+      <section id="view-achievements" class="view-panel" style="display: none;">
+        <div id="achievements-content"></div>
+      </section>
+
+    </main>
+
+    <!-- Mobile Touch-First Bottom Navigation Bar -->
+    <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+      <a href="#" class="mobile-nav-item nav-active" data-nav="dashboard">
+        <span class="icon">🗺️</span>
+        <span>Roadmap</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-nav="zero">
+        <span class="icon">🔰</span>
+        <span>Zero</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-nav="books">
+        <span class="icon">📖</span>
+        <span>N5 Master</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-nav="hub" data-level="N5">
+        <span class="icon">📚</span>
+        <span>Curriculum</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-nav="tracer">
+        <span class="icon">🖌️</span>
+        <span>Tracer</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-nav="games">
+        <span class="icon">🎮</span>
+        <span>Games</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-nav="srs">
+        <span class="icon">🧠</span>
+        <span>SRS</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- Quick Emergency Beginner Cheat Sheet Button -->
+  <button id="rescue-cheat-btn" class="rescue-cheat-btn" onclick="NihongoApp.toggleCheatSheet()" title="Emergency Beginner Quick Cheat Sheet">
+    <span>🆘</span>
+    <span>Cheat Sheet</span>
+  </button>
+
+  <!-- Quick Rescue Cheat Sheet Slide-Over Drawer -->
+  <aside id="rescue-cheat-drawer" class="rescue-cheat-drawer" aria-label="Quick Cheat Sheet">
+    <div class="cheat-drawer-header">
+      <h3 style="margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.4rem;">
+        <span>🆘 Beginner Rescue Cheat Sheet</span>
+      </h3>
+      <button class="btn btn-secondary btn-sm" onclick="NihongoApp.toggleCheatSheet()">✕ Close</button>
+    </div>
+    <div class="cheat-drawer-body" id="cheat-drawer-body">
+      <!-- Rendered dynamically by NihongoApp.renderCheatSheet() -->
+    </div>
+  </aside>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Application Scripts (Zero Third-Party Dependencies) -->
+  <script src="js/data/kanaData.js"></script>
+  <script src="js/data/zeroBeginnerData.js"></script>
+  <script src="js/data/bookCurriculumData.js"></script>
+  <script src="js/data/questPathData.js"></script>
+  <script src="js/mascot.js"></script>
+  <script src="js/data/n5Data.js"></script>
+  <script src="js/data/n4Data.js"></script>
+  <script src="js/data/n3Data.js"></script>
+  <script src="js/data/n2Data.js"></script>
+  <script src="js/data/n1Data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/srs.js"></script>
+  <script src="js/canvas-tracer.js"></script>
+  <script src="js/quest-runner.js"></script>
+  <script src="js/games/matcher.js"></script>
+  <script src="js/games/particle-slinger.js"></script>
+  <script src="js/games/speed-blitz.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

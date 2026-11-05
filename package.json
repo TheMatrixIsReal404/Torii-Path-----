@@ -1,0 +1,32 @@
+{
+  "name": "nihongo-master",
+  "version": "2.1.0",
+  "description": "Production-grade, highly engaging Japanese language learning platform from absolute beginner (JLPT N5) through advanced fluency (JLPT N1).",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "test": "node -e \"console.log('Use test-runner.html in any browser or Microsoft Edge headless')\"",
+    "test:headless": "msedge --headless --dump-dom --virtual-time-budget=3000 test-runner.html"
+  },
+  "keywords": [
+    "japanese",
+    "nihongo",
+    "jlpt",
+    "kanji",
+    "hiragana",
+    "katakana",
+    "furigana",
+    "language-learning",
+    "spaced-repetition",
+    "stroke-order"
+  ],
+  "author": "Nihongo Master Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/nihongo-master.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

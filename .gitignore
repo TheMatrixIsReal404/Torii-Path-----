@@ -1,0 +1,141 @@
+# =========================================================================
+# Japanese Learning Web Application - .gitignore
+# =========================================================================
+
+# --- Local Reference Materials & Data Extraction (Offline Only) ---
+N5 books/
+*books*/
+N5_extracted_docs/
+*extracted*/
+*extracted_docs*/
+extracted/
+scripts/
+
+# --- Binary & Large Document Formats ---
+*.pdf
+**/*.pdf
+*.epub
+*.mobi
+*.zip
+*.tar.*
+
+# --- Feature Testing Scripts & Test Harnesses ---
+test-runner.html
+tests/
+test_*.html
+test_*.py
+tmp_*.*
+tmp_*.py
+update_*.py
+scratch/
+*.py
+
+# --- Python Bytecode & Runtime Cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Python Virtual Environments ---
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Testing & Type Checking Cache ---
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# --- Node / Package Managers (if used) ---
+node_modules/
+jspm_packages/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# --- Temporary & Scratch Files ---
+*.tmp
+commit_msg.txt
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+*.log
+
+# --- Operating System Files ---
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# --- IDE & Editor Specific Files ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

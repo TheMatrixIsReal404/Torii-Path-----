@@ -1,0 +1,874 @@
+/**
+ * Nihongo Master: Games and Interactive Canvas Styles
+ * Canvas Tracer, Matcher, Particle Slinger, Speed Blitz, SRS Review Deck.
+ */
+
+/* ==========================================================================
+   1. Interactive Stroke-Order Canvas Tracer
+   ========================================================================== */
+.tracer-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .tracer-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tracer-canvas-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas-frame {
+  position: relative;
+  background-color: #FFFFFF;
+  border: 4px solid #334155;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .canvas-frame {
+  background-color: #FDFBF7; /* Warm washi paper canvas */
+  border-color: #475569;
+}
+
+#stroke-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.tracer-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 380px;
+}
+
+.tracer-feedback-msg {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 0.75rem;
+  min-height: 1.5em;
+  transition: color 0.2s ease;
+}
+
+.feedback-warn {
+  color: var(--c-akane) !important;
+  animation: shake-cue 0.3s ease;
+}
+
+@keyframes shake-cue {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.tracer-meta-sidebar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.tracer-select-group {
+  margin-bottom: 1.25rem;
+}
+
+.tracer-select-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.tracer-select {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.tracer-char-info {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.25rem;
+}
+
+.tracer-char-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tracer-huge-char {
+  font-size: 4rem;
+  font-family: var(--font-jp);
+  color: var(--c-akane);
+  line-height: 1;
+}
+
+.tracer-char-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tracer-strokes-badge {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.tracer-meaning {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.tracer-mnemonic {
+  font-size: 0.85rem;
+  background: var(--bg-surface-elevated);
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--c-kin);
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   2. Matcher Memory Card Game
+   ========================================================================== */
+.matcher-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.matcher-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.game-select {
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.matcher-stats {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.stat-pill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.stat-pill strong {
+  color: var(--text-primary);
+}
+
+.matcher-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (max-width: 580px) {
+  .matcher-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.memory-card {
+  aspect-ratio: 1 / 1;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.memory-card.is-flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-subtle);
+  padding: 0.5rem;
+}
+
+.card-front {
+  background: linear-gradient(135deg, #1E293B, #0F172A);
+  color: var(--c-akane);
+}
+
+[data-theme="light"] .card-front {
+  background: linear-gradient(135deg, #E2E8F0, #CBD5E1);
+}
+
+.card-front .card-icon {
+  font-size: 2rem;
+}
+
+.card-back {
+  background-color: var(--bg-surface);
+  transform: rotateY(180deg);
+  border-color: var(--c-ruri);
+}
+
+.card-main-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-jp);
+}
+
+.card-sub-text {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.memory-card.is-matched .card-back {
+  border-color: var(--c-take);
+  background-color: rgba(16, 185, 129, 0.15);
+  animation: match-pulse 0.4s ease;
+}
+
+@keyframes match-pulse {
+  0% { transform: rotateY(180deg) scale(1); }
+  50% { transform: rotateY(180deg) scale(1.08); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+/* Victory Modal */
+.victory-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.victory-icon {
+  font-size: 3.5rem;
+}
+
+.victory-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.victory-stat-item {
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.victory-stat-item .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.victory-stat-item .value {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.victory-stat-item .highlight {
+  color: var(--c-take);
+}
+
+.victory-actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   3. Particle Slinger Game
+   ========================================================================== */
+.slinger-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.slinger-hud {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hud-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.hud-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.hud-timer.time-warning {
+  color: var(--c-akane);
+  animation: timer-pulse 0.6s infinite alternate;
+}
+
+@keyframes timer-pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.2); }
+}
+
+.hud-combo.combo-blazing {
+  color: var(--c-kin);
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
+}
+
+/* Stage Arena */
+.slinger-stage {
+  background: linear-gradient(180deg, var(--bg-surface), var(--bg-surface-elevated));
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.slinger-target-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  font-family: var(--font-jp);
+}
+
+.target-sentence-part {
+  color: var(--text-primary);
+}
+
+.target-blank-drop {
+  width: 58px;
+  height: 58px;
+  border: 3px dashed var(--c-akane);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(232, 57, 41, 0.1);
+  transition: all 0.2s ease;
+}
+
+.blank-indicator {
+  color: var(--c-akane);
+  font-weight: 800;
+}
+
+.blank-hit-correct {
+  border-color: var(--c-take) !important;
+  background-color: rgba(16, 185, 129, 0.25) !important;
+  transform: scale(1.1);
+}
+
+.blank-hit-error {
+  border-color: var(--c-akane) !important;
+  background-color: rgba(232, 57, 41, 0.3) !important;
+  animation: shake-cue 0.3s ease;
+}
+
+.locked-particle {
+  color: var(--c-take);
+  font-weight: 800;
+}
+
+.slinger-meaning-hint {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
+.slinger-feedback-banner {
+  margin-top: 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  min-height: 1.4em;
+}
+
+.feedback-correct { color: var(--c-take); }
+.feedback-wrong { color: var(--c-akane); }
+
+/* Launch Tray */
+.slinger-tray-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.tray-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.particle-cannon-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.btn-particle-ammo {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  border: 2px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-jp);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-particle-ammo:hover {
+  background: var(--c-akane);
+  color: #FFFFFF;
+  border-color: var(--c-akane);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 14px rgba(232, 57, 41, 0.3);
+}
+
+.btn-particle-ammo:active {
+  transform: scale(0.95);
+}
+
+/* Flying projectile badge */
+.particle-projectile {
+  position: fixed;
+  z-index: 1000;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--c-akane);
+  color: #FFFFFF;
+  font-size: 1.4rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(232, 57, 41, 0.6);
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.4, 1.2), opacity 0.28s ease;
+}
+
+/* ==========================================================================
+   4. Speed Vocabulary Blitz
+   ========================================================================== */
+.blitz-container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.blitz-hud {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.blitz-time-bar {
+  height: 8px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.blitz-time-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-take), var(--c-ruri));
+  transition: width 1s linear;
+}
+
+.blitz-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.blitz-word-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.blitz-target-word {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-family: var(--font-jp);
+  color: var(--text-primary);
+}
+
+.blitz-reading-hint {
+  font-size: 1.1rem;
+  color: var(--c-akane);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.blitz-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .blitz-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.blitz-opt-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.blitz-opt-btn:hover:not(:disabled) {
+  border-color: var(--c-ruri);
+  transform: translateY(-2px);
+  background: var(--bg-surface-elevated);
+}
+
+.streak-fire {
+  color: var(--c-kin);
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+}
+
+.missed-words-section {
+  background: var(--bg-surface-elevated);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.missed-words-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.missed-words-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.word-chip {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   5. Spaced Repetition (SRS) Review Deck
+   ========================================================================== */
+.srs-review-wrapper {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.srs-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.srs-progress-pill {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.srs-box-badge {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--c-ruri);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.srs-flashcard {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.srs-card-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.srs-card-front {
+  margin: 1.5rem 0;
+}
+
+.srs-front-text {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-family: var(--font-jp);
+  color: var(--text-primary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.srs-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 1.5rem 0 1rem 0;
+}
+
+.srs-reading {
+  font-size: 1.3rem;
+  color: var(--c-akane);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.srs-meaning {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0.35rem 0;
+}
+
+.srs-example {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.srs-rating-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.btn-srs-rate {
+  padding: 0.6rem 0.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-srs-rate small {
+  font-weight: normal;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.rate-again {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.rate-again:hover {
+  background: #EF4444;
+  color: #FFFFFF;
+}
+
+.rate-hard {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--c-kin);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.rate-hard:hover {
+  background: var(--c-kin);
+  color: #FFFFFF;
+}
+
+.rate-good {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--c-ruri);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.rate-good:hover {
+  background: var(--c-ruri);
+  color: #FFFFFF;
+}
+
+.rate-easy {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--c-take);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.rate-easy:hover {
+  background: var(--c-take);
+  color: #FFFFFF;
+}
+
+.srs-zen-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* ==========================================================================
+   6. Onboarding Modal & Backup
+   ========================================================================== */
+.onboarding-dialog {
+  max-width: 580px;
+}
+
+.onboarding-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.onboard-step {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background: var(--bg-surface-elevated);
+  padding: 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.92rem;
+}
+
+.step-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.backup-actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.file-upload-label {
+  cursor: pointer;
+  text-align: center;
+}
