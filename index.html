@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="description" content="Torii Path (鳥居の道): A production-grade, responsive Japanese language learning platform from JLPT N5 through N1 with stroke-order canvas tracing, gamified drills, SRS, and rich syllabus content.">
+  <meta name="description" content="Torii Path (鳥居の道): An interactive, responsive Japanese language learning platform from JLPT N5 through N1 with stroke-order canvas tracing, gamified drills, SRS, and rich syllabus content.">
   <meta name="theme-color" content="#E83929">
+  <meta name="referrer" content="no-referrer">
   <title>鳥居の道 • Torii Path (JLPT N5 - N1)</title>
 
   <!-- Stylesheets -->
@@ -20,107 +21,127 @@
       <div class="header-inner">
         <!-- Logo / Brand -->
         <a href="#" class="brand-block" data-nav="dashboard" aria-label="Torii Path Home">
-          <span class="brand-icon" aria-hidden="true">⛩️</span>
-          <div>
+          <div class="brand-logo-frame">
+            <span class="brand-icon" aria-hidden="true">⛩️</span>
+          </div>
+          <div class="brand-title-wrap">
             <span class="brand-title">Torii Path</span>
-            <span class="brand-kanji">鳥居の道</span>
+            <span class="brand-kanji-badge">鳥居の道</span>
           </div>
         </a>
 
         <!-- Desktop Navigation Bar -->
         <nav class="desktop-nav" role="navigation" aria-label="Primary Navigation">
           <a href="#" class="nav-item nav-active" data-nav="dashboard">
-            <span>🗺️ Roadmap</span>
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-label">Roadmap</span>
           </a>
           <a href="#" class="nav-item" data-nav="zero">
-            <span>🔰 Zero to Hero</span>
+            <span class="nav-icon">🔰</span>
+            <span class="nav-label">Zero</span>
           </a>
           <a href="#" class="nav-item" data-nav="books">
-            <span>📖 N5 Masterclass</span>
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">N5</span>
           </a>
           <a href="#" class="nav-item" data-nav="hub" data-level="N5">
-            <span>📚 Curriculum</span>
+            <span class="nav-icon">📚</span>
+            <span class="nav-label">Levels</span>
           </a>
           <a href="#" class="nav-item" data-nav="kana">
-            <span>🔤 Kana</span>
+            <span class="nav-icon">🔤</span>
+            <span class="nav-label">Kana</span>
           </a>
           <a href="#" class="nav-item" data-nav="tracer">
-            <span>🖌️ Tracer</span>
+            <span class="nav-icon">🖌️</span>
+            <span class="nav-label">Tracer</span>
           </a>
           <a href="#" class="nav-item" data-nav="games">
-            <span>🎮 Games</span>
+            <span class="nav-icon">🎮</span>
+            <span class="nav-label">Arcade</span>
           </a>
           <a href="#" class="nav-item" data-nav="srs">
-            <span>🧠 SRS Review</span>
+            <span class="nav-icon">🧠</span>
+            <span class="nav-label">Review</span>
             <span class="srs-due-badge" style="display: none;">0</span>
           </a>
           <a href="#" class="nav-item" data-nav="achievements">
-            <span>🏆 Badges</span>
+            <span class="nav-icon">🏆</span>
+            <span class="nav-label">Badges</span>
           </a>
         </nav>
 
-        <!-- User Progress Header Badges & Controls -->
-        <div class="header-stats">
-          <div class="streak-badge" title="Consecutive Daily Learning Streak">
-            <span aria-hidden="true">🔥</span>
-            <span id="header-streak-count">1d</span>
+        <!-- Right Side: Stats Capsule + Utilities Toolbar -->
+        <div class="header-right-group">
+          <!-- Player Progress HUD Capsule -->
+          <div class="header-hud" role="group" aria-label="Player Progress">
+            <div class="hud-pill streak-badge" title="Consecutive Daily Learning Streak">
+              <span class="hud-icon" aria-hidden="true">🔥</span>
+              <span id="header-streak-count">1d</span>
+            </div>
+            <div class="hud-sep" aria-hidden="true"></div>
+            <div class="hud-pill xp-badge" title="Accumulated Mastery XP">
+              <span class="hud-icon" aria-hidden="true">⚡</span>
+              <span id="header-xp-val">0 XP</span>
+            </div>
+            <div class="hud-sep" aria-hidden="true"></div>
+            <div id="header-rank-badge" class="hud-pill rank-badge" title="Mastery Rank: 初心者 (Novice)">初心者</div>
           </div>
 
-          <div class="xp-badge" title="Accumulated Mastery XP">
-            <span aria-hidden="true">⚡</span>
-            <span id="header-xp-val">0 XP</span>
-          </div>
-
-          <div id="header-rank-badge" class="rank-badge" title="Mastery Rank">
-            初心者 (Novice)
-          </div>
-
-          <!-- Quick Accessibility & Controls Toolbar -->
+          <!-- Quick Controls Toolbar -->
           <div class="header-controls">
             <!-- Furigana Mode Selector -->
-            <div class="furigana-controller" title="Furigana Display Mode">
-              <label for="furigana-mode-select">Furigana:</label>
-              <select id="furigana-mode-select" class="furigana-select" aria-label="Furigana Display Mode">
-                <option value="all">Show All</option>
-                <option value="hover">Hover / Tap Only</option>
-                <option value="hide">Hide All</option>
-              </select>
-            </div>
-
-            <!-- Romaji Mode Selector for Day-1 Beginners -->
-            <div class="romaji-controller" title="Romaji Subtitle Display Mode for Day-1 Beginners">
-              <label for="romaji-mode-select">Romaji:</label>
-              <select id="romaji-mode-select" class="furigana-select" aria-label="Romaji Display Mode">
-                <option value="all">Show All</option>
-                <option value="hover">Hover / Tap</option>
+            <div class="control-pill" title="Furigana Display Mode">
+              <span class="control-label" title="Furigana Display">あ</span>
+              <select id="furigana-mode-select" class="nav-select-clean" aria-label="Furigana Display Mode">
+                <option value="all">All</option>
+                <option value="hover">Hover</option>
                 <option value="hide">Hide</option>
               </select>
             </div>
 
             <!-- Dark / Light Theme Toggle -->
-            <button id="theme-toggle-btn" class="theme-btn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
-              ☀️ Light
-            </button>
-
-            <!-- Audio Speed Toggle (Slow 0.65x / Normal 0.85x) -->
-            <button id="audio-speed-btn" class="theme-btn" title="Toggle Slow / Normal Audio Pronunciation Speed" aria-label="Toggle Pronunciation Speed">
-              🐢 0.65x
-            </button>
+            <button id="theme-toggle-btn" class="nav-action-btn nav-icon-circle" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">☀️</button>
 
             <!-- Audio Mute / Unmute -->
-            <button id="audio-mute-btn" class="audio-mute-btn" title="Mute/Unmute Speech & Audio Effects" aria-label="Toggle Sound">
-              🔊 Sound
-            </button>
+            <button id="audio-mute-btn" class="nav-action-btn nav-icon-circle" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
 
-            <!-- Backup & Restore Data Modal -->
-            <button id="backup-data-btn" class="theme-btn" title="Backup or Restore Progress" aria-label="Data Backup">
-              💾 Data
-            </button>
+            <!-- Preferences Popover Dropdown -->
+            <div class="nav-dropdown-wrapper">
+              <button id="nav-more-btn" class="nav-action-btn nav-icon-circle" title="Preferences & Utilities" aria-label="More Settings" aria-expanded="false">
+                ⚙️
+              </button>
+              <div id="nav-more-menu" class="nav-popover-panel" style="display: none;">
+                <div class="popover-title">Preferences & Tools</div>
 
-            <!-- Help / Onboarding Tour -->
-            <button id="help-tour-btn" class="theme-btn" title="Open Interactive Tour" aria-label="Help and Tour">
-              ❓ Tour
-            </button>
+                <div class="popover-row">
+                  <label for="romaji-mode-select">Romaji Aids:</label>
+                  <select id="romaji-mode-select" class="nav-select-clean" aria-label="Romaji Display Mode">
+                    <option value="all">Show All</option>
+                    <option value="hover">Hover / Tap</option>
+                    <option value="hide">Hide</option>
+                  </select>
+                </div>
+
+                <div class="popover-row">
+                  <span>Audio Pace:</span>
+                  <button id="audio-speed-btn" class="popover-pill-btn" title="Toggle Slow / Normal Audio Pronunciation Speed">
+                    🐢 0.65x
+                  </button>
+                </div>
+
+                <div class="popover-divider"></div>
+
+                <div class="popover-actions">
+                  <button id="backup-data-btn" class="popover-menu-item">
+                    <span>💾</span> <span>Backup & Restore Data</span>
+                  </button>
+                  <button id="help-tour-btn" class="popover-menu-item">
+                    <span>❓</span> <span>Interactive Tour</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

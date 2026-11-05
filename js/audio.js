@@ -246,12 +246,35 @@ window.NihongoAudio = (function() {
     }
   }
 
+  // --- Voice & SpeechSynthesis Detection ---
+  function hasJapaneseVoice() {
+    if (!('speechSynthesis' in window)) return false;
+    try {
+      const voices = window.speechSynthesis.getVoices();
+      return voices.some(v => v.lang === 'ja-JP' || v.lang === 'ja_JP' || (v.lang && v.lang.startsWith('ja')) || (v.name && (v.name.toLowerCase().includes('japanese') || v.name.includes('日本語'))));
+    } catch (e) {
+      return false;
+    }
+  }
+
   // --- Tier 2: Browser Web Speech Synthesis Fallback ---
   function speakViaSpeechSynthesis(cleanText, effectiveRate, onStart, onEnd) {
     if (!('speechSynthesis' in window)) {
       speakViaFormantSynth(cleanText, onStart, onEnd);
       return;
     }
+
+    // If voices are loaded and NONE are Japanese, Chrome can hang indefinitely on ja-JP.
+    // In that case, fall back directly to Web Audio Formant Synthesizer!
+    try {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0 && !hasJapaneseVoice()) {
+        console.warn('No Japanese TTS voice installed on system, falling back to Formant Synthesizer.');
+        speakViaFormantSynth(cleanText, onStart, onEnd);
+        return;
+      }
+    } catch (e) {}
+
     try {
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(cleanText);
@@ -263,12 +286,20 @@ window.NihongoAudio = (function() {
       if (preferredJaVoice) utter.voice = preferredJaVoice;
 
       let started = false;
+      let finished = false;
+
+      function done() {
+        if (finished) return;
+        finished = true;
+        if (onEnd) onEnd();
+      }
+
       utter.onstart = () => {
         started = true;
         if (onStart) onStart();
       };
       utter.onend = () => {
-        if (onEnd) onEnd();
+        done();
       };
       utter.onerror = (err) => {
         console.warn('SpeechSynthesis error, falling back to formant synthesizer:', err);
@@ -277,12 +308,14 @@ window.NihongoAudio = (function() {
 
       window.speechSynthesis.speak(utter);
 
-      // Safety timeout in case speech synthesis gets stuck silently
+      // Watchdog timeout: If SpeechSynthesis hangs or fails to start within 1.2s, force fallback
       setTimeout(() => {
-        if (!started && !window.speechSynthesis.speaking) {
-          if (onEnd) onEnd();
+        if (!started && !finished) {
+          try { window.speechSynthesis.cancel(); } catch (e) {}
+          console.warn('SpeechSynthesis timed out, using formant synthesizer');
+          speakViaFormantSynth(cleanText, onStart, onEnd);
         }
-      }, 3000);
+      }, 1200);
     } catch (e) {
       speakViaFormantSynth(cleanText, onStart, onEnd);
     }
@@ -309,7 +342,57 @@ window.NihongoAudio = (function() {
     }
   }
 
-  // --- Tier 1 (Primary): Google TTS Native Japanese Streaming ---
+  // Multi-source streaming playback with automatic failover (GitHub Pages compatible)
+  function tryPlayStream(urlList, index, cleanText, effectiveRate, onStart, onEnd) {
+    if (index >= urlList.length) {
+      // All native audio streams failed, fall back to Tier 2 / Tier 3
+      speakViaSpeechSynthesis(cleanText, effectiveRate, onStart, onEnd);
+      return;
+    }
+
+    const url = urlList[index];
+    try {
+      const audio = document.createElement('audio');
+      audio.referrerPolicy = 'no-referrer';
+      audio.crossOrigin = 'anonymous';
+      audio.src = url;
+      audio.playbackRate = effectiveRate;
+      currentAudio = audio;
+
+      let hasFinished = false;
+      function done(err) {
+        if (hasFinished) return;
+        hasFinished = true;
+        if (currentAudio === audio) currentAudio = null;
+        if (onEnd) onEnd(err);
+      }
+
+      audio.onplay = () => {
+        if (onStart) onStart();
+      };
+      audio.onended = () => {
+        done();
+      };
+      audio.onerror = (e) => {
+        console.warn(`Audio stream source ${index + 1} failed, trying failover...`);
+        if (currentAudio === audio) currentAudio = null;
+        tryPlayStream(urlList, index + 1, cleanText, effectiveRate, onStart, onEnd);
+      };
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn(`Audio play ${index + 1} rejected, trying failover:`, err);
+          if (currentAudio === audio) currentAudio = null;
+          tryPlayStream(urlList, index + 1, cleanText, effectiveRate, onStart, onEnd);
+        });
+      }
+    } catch (err) {
+      tryPlayStream(urlList, index + 1, cleanText, effectiveRate, onStart, onEnd);
+    }
+  }
+
+  // --- Tier 1 (Primary): Multi-Source High-Fidelity Native Japanese Streaming ---
   function speak(text, rate = null, onStart, onEnd) {
     if (isMuted) {
       if (onEnd) onEnd();
@@ -330,48 +413,15 @@ window.NihongoAudio = (function() {
     stopCurrentAudio();
 
     const effectiveRate = rate !== null ? rate : (isSlowMode ? 0.65 : speechRate);
-    const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+    const encoded = encodeURIComponent(cleanText);
 
-    try {
-      const audio = new Audio(ttsUrl);
-      audio.playbackRate = effectiveRate;
-      currentAudio = audio;
+    // List of reliable streaming endpoints (Tier 1A: Youdao native Japanese, Tier 1B: Google TTS no-referrer)
+    const streamUrls = [
+      `https://dict.youdao.com/dictvoice?audio=${encoded}&le=jap`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=${encoded}`
+    ];
 
-      let hasEnded = false;
-      function finish(err) {
-        if (hasEnded) return;
-        hasEnded = true;
-        if (currentAudio === audio) currentAudio = null;
-        if (onEnd) onEnd(err);
-      }
-
-      audio.onplay = () => {
-        if (onStart) onStart();
-      };
-
-      audio.onended = () => {
-        finish();
-      };
-
-      audio.onerror = (e) => {
-        console.warn('HTML5 Audio stream error, trying SpeechSynthesis fallback:', e);
-        if (currentAudio === audio) currentAudio = null;
-        speakViaSpeechSynthesis(cleanText, effectiveRate, onStart, onEnd);
-      };
-
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          // Play rejected (e.g. autoplay restriction before gesture or network failure)
-          console.warn('HTML5 Audio play rejected, falling back:', err);
-          if (currentAudio === audio) currentAudio = null;
-          speakViaSpeechSynthesis(cleanText, effectiveRate, onStart, onEnd);
-        });
-      }
-    } catch (err) {
-      console.warn('HTML5 Audio instantiation failed:', err);
-      speakViaSpeechSynthesis(cleanText, effectiveRate, onStart, onEnd);
-    }
+    tryPlayStream(streamUrls, 0, cleanText, effectiveRate, onStart, onEnd);
   }
 
   // Speak mora-by-mora with delay for absolute beginners
@@ -411,11 +461,18 @@ window.NihongoAudio = (function() {
   function initEventDelegation() {
     if (typeof document === 'undefined') return;
 
+    // Immediately unlock Web Audio API on first user interaction
+    const unlock = () => { getAudioContext(); };
+    document.addEventListener('touchstart', unlock, { once: true, passive: true });
+    document.addEventListener('click', unlock, { once: true, passive: true });
+
     document.addEventListener('click', (e) => {
       const speakEl = e.target.closest('[data-speak]');
       if (!speakEl) return;
 
-      // If user clicked inside a button or clickable element with data-speak
+      // Ensure audio context is ready on user gesture
+      getAudioContext();
+
       e.stopPropagation();
 
       const text = speakEl.getAttribute('data-speak');
@@ -423,7 +480,6 @@ window.NihongoAudio = (function() {
 
       const customRate = parseFloat(speakEl.getAttribute('data-speak-rate')) || null;
 
-      // Update active highlight
       if (activeElement && activeElement !== speakEl) {
         activeElement.classList.remove('audio-playing');
       }

@@ -54,12 +54,12 @@ window.NihongoApp = (function() {
 
     const themeBtn = document.getElementById('theme-toggle-btn');
     if (themeBtn) {
-      themeBtn.innerHTML = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+      themeBtn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
       themeBtn.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme');
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        themeBtn.innerHTML = next === 'dark' ? '☀️ Light' : '🌙 Dark';
+        themeBtn.innerHTML = next === 'dark' ? '☀️' : '🌙';
         if (window.NihongoState) window.NihongoState.setTheme(next);
       });
     }
@@ -440,7 +440,7 @@ window.NihongoApp = (function() {
       muteBtn.addEventListener('click', () => {
         if (window.NihongoAudio) {
           const isMuted = window.NihongoAudio.toggleMute();
-          muteBtn.innerHTML = isMuted ? '🔇 Muted' : '🔊 Sound';
+          muteBtn.innerHTML = isMuted ? '🔇' : '🔊';
         }
       });
     }
@@ -455,6 +455,25 @@ window.NihongoApp = (function() {
     const backupBtn = document.getElementById('backup-data-btn');
     if (backupBtn) {
       backupBtn.addEventListener('click', showBackupModal);
+    }
+
+    // Preferences & Utilities Popover Toggle
+    const moreBtn = document.getElementById('nav-more-btn');
+    const moreMenu = document.getElementById('nav-more-menu');
+    if (moreBtn && moreMenu) {
+      moreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = moreMenu.style.display !== 'none';
+        moreMenu.style.display = isOpen ? 'none' : 'block';
+        moreBtn.setAttribute('aria-expanded', !isOpen);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!moreMenu.contains(e.target) && e.target !== moreBtn) {
+          moreMenu.style.display = 'none';
+          moreBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
     }
   }
 
@@ -525,7 +544,7 @@ window.NihongoApp = (function() {
 
     if (streakEl) streakEl.textContent = `${state.streak.count}d`;
     if (xpEl) xpEl.textContent = `${state.xp} XP`;
-    if (rankEl) rankEl.textContent = `${rank.name} (${rank.title})`;
+    if (rankEl) { rankEl.textContent = rank.name; rankEl.title = `Mastery Rank: ${rank.name} (${rank.title})`; }
 
     updateSrsBadges();
   }
@@ -3513,7 +3532,7 @@ window.NihongoApp = (function() {
         <div class="victory-header">
           <span class="victory-icon">🎌</span>
           <h2>Welcome to 鳥居の道 (Torii Path)!</h2>
-          <p>Your zero-dependency, production-grade guide from JLPT N5 through N1.</p>
+          <p>Your zero-dependency, interactive guide from JLPT N5 through N1.</p>
         </div>
         <div class="onboarding-steps-list">
           <div class="onboard-step">

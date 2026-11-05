@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 <p align="center">
-  A production-grade, highly engaging, responsive Japanese language learning web application designed to guide learners from absolute beginner (<strong>JLPT N5</strong>) through native-adjacent fluency (<strong>JLPT N1</strong>). Built with pure semantic HTML5, modern CSS3 custom properties, and vanilla modern ES6+ JavaScript with <strong>zero third-party runtime dependencies</strong>.
+  An interactive, highly engaging, responsive Japanese language learning web application designed to guide learners from absolute beginner (<strong>JLPT N5</strong>) through native-adjacent fluency (<strong>JLPT N1</strong>). Built with pure semantic HTML5, modern CSS3 custom properties, and vanilla modern ES6+ JavaScript with <strong>zero third-party runtime dependencies</strong>.
 </p>
 
 </div>

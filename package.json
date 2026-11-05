@@ -1,7 +1,7 @@
 {
   "name": "torii-path",
   "version": "2.1.0",
-  "description": "Torii Path (鳥居の道) — Production-grade, highly engaging Japanese language learning platform from absolute beginner (JLPT N5) through advanced fluency (JLPT N1).",
+  "description": "Torii Path (鳥居の道) — Highly engaging, interactive Japanese language learning platform from absolute beginner (JLPT N5) through advanced fluency (JLPT N1).",
   "main": "index.html",
   "scripts": {
     "start": "python -m http.server 8080",
