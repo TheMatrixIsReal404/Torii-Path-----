@@ -1,7 +1,7 @@
 {
-  "name": "nihongo-master",
+  "name": "torii-path",
   "version": "2.1.0",
-  "description": "Production-grade, highly engaging Japanese language learning platform from absolute beginner (JLPT N5) through advanced fluency (JLPT N1).",
+  "description": "Torii Path (鳥居の道) — Production-grade, highly engaging Japanese language learning platform from absolute beginner (JLPT N5) through advanced fluency (JLPT N1).",
   "main": "index.html",
   "scripts": {
     "start": "python -m http.server 8080",
@@ -20,11 +20,11 @@
     "spaced-repetition",
     "stroke-order"
   ],
-  "author": "Nihongo Master Team",
+  "author": "Torii Path Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/example/nihongo-master.git"
+    "url": "https://github.com/TheMatrixIsReal404/Torii-Path-----.git"
   },
   "engines": {
     "node": ">=18.0.0"

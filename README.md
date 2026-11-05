@@ -1,4 +1,4 @@
-# 日本語マスター • Nihongo Master (JLPT N5 – N1)
+# 鳥居の道 • Torii Path (JLPT N5 – N1)
 
 <div align="center">
 

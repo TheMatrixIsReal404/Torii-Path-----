@@ -1,5 +1,5 @@
 /**
- * Nihongo Master - Universal Japanese Audio Engine
+ * Torii Path - Universal Japanese Audio Engine
  * 
  * 1. Tier 1 (Primary): High-fidelity Native Japanese Audio Streaming via HTML5 Audio
  *    - Uses natural Japanese pronunciation with full pitch accent and native cadence.

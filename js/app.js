@@ -3512,7 +3512,7 @@ window.NihongoApp = (function() {
       <div class="game-modal-dialog onboarding-dialog">
         <div class="victory-header">
           <span class="victory-icon">🎌</span>
-          <h2>Welcome to 日本語マスター (Nihongo Master)!</h2>
+          <h2>Welcome to 鳥居の道 (Torii Path)!</h2>
           <p>Your zero-dependency, production-grade guide from JLPT N5 through N1.</p>
         </div>
         <div class="onboarding-steps-list">
